@@ -5,7 +5,7 @@ RUN apk add git npm protobuf-dev protoc
 COPY swagger-ui-server /go/src/github.com/hirofumi/docker-grpc-gateway-swagger-ui/swagger-ui-server
 
 RUN cd /go/src/github.com/hirofumi/docker-grpc-gateway-swagger-ui/swagger-ui-server \
-    && go install \
+    && go install -ldflags '-w -s' \
         github.com/golang/protobuf/protoc-gen-go \
         github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway \
         github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger \
