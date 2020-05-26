@@ -1,29 +1,36 @@
-FROM golang:1.14.3-alpine
+FROM golang:1.14.3-alpine AS builder
 
-ENV PATH $PATH:/go/bin
-ENV TOOLS /go/src/github.com/hirofumi/docker-grpc-gateway-swagger-ui/tools
+RUN apk add git npm protobuf-dev protoc
 
-COPY tools $TOOLS
+COPY swagger-ui-server /go/src/github.com/hirofumi/docker-grpc-gateway-swagger-ui/swagger-ui-server
 
-RUN mkdir /api \
-    && apk --no-cache --virtual .deps add git \
-    && apk --no-cache add nodejs npm protobuf-dev protoc \
-    && cd "$TOOLS/deps" \
+RUN cd /go/src/github.com/hirofumi/docker-grpc-gateway-swagger-ui/swagger-ui-server \
     && go install \
         github.com/golang/protobuf/protoc-gen-go \
         github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway \
         github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger \
-    && cd "$TOOLS/ui" \
-    && npm i \ 
-    && rm -rf "$TOOLS/deps" \
-    && apk del .deps
+    && go generate ./... \
+    && go build -ldflags '-w -s' -o /go/bin/swagger-ui-server . \
+    && cd "$(find /go/pkg/mod/github.com/grpc-ecosystem -name 'grpc-gateway@*' | sort -r -t@ -V | head -n 1)" \
+    && mkdir /grpc-gateway \
+    && find . -name '*.proto' -exec cp --parents {} /grpc-gateway ';'
 
-ENV PROTO_FILE /proto/*.proto
-ENV SWAGGER_JSON apidocs.swagger.json
-ENV SWAGGER_OUT logtostderr=true,json_names_for_fields=true,allow_merge=true:/api
+FROM alpine:3.11
+
+ENV PROTO_DIRECTORY /proto
+ENV PROTO_FILES *.proto
+ENV SWAGGER_DIRECTORY /api
+ENV SWAGGER_FILE apidocs.swagger.json
+ENV SWAGGER_PARAMS logtostderr=true,json_names_for_fields=true,allow_merge=true
+
+ENV SHUTDOWN_TIMEOUT=10s
 ENV PORT 3000
+
+COPY --from=builder /go/bin /usr/local/bin
+COPY --from=builder /grpc-gateway /grpc-gateway
+
+RUN mkdir "$SWAGGER_DIRECTORY" && apk --no-cache add protobuf-dev protoc
 
 EXPOSE $PORT
 
-WORKDIR $TOOLS
-CMD ["sh", "-c", "./protoc.sh -I/proto --swagger_out=$SWAGGER_OUT $PROTO_FILE && cd ui && npm start"]
+CMD ["sh", "-c", "cd \"$PROTO_DIRECTORY\" && protoc -I/grpc-gateway -I/grpc-gateway/third_party/googleapis -I. --swagger_out=\"$SWAGGER_PARAMS:$SWAGGER_DIRECTORY\" $PROTO_FILES && swagger-ui-server"]

@@ -1,0 +1,7 @@
+{
+  "name": "swagger-ui-server-assets",
+  "version": "0.1.0",
+  "dependencies": {
+    "swagger-ui-dist": "^3.25.4"
+  }
+}
