@@ -11,6 +11,7 @@ RUN cd /go/src/github.com/hirofumi/docker-grpc-gateway-swagger-ui/swagger-ui-ser
         github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger \
     && go generate ./... \
     && go build -ldflags '-w -s' -o /go/bin/swagger-ui-server . \
+    && cp -p start.sh /go/bin \
     && cd "$(find /go/pkg/mod/github.com/grpc-ecosystem -name 'grpc-gateway@*' | sort -r -t@ -V | head -n 1)" \
     && mkdir /grpc-gateway \
     && find . -name '*.proto' -exec cp --parents {} /grpc-gateway ';'
@@ -29,8 +30,8 @@ ENV PORT 3000
 COPY --from=builder /go/bin /usr/local/bin
 COPY --from=builder /grpc-gateway /grpc-gateway
 
-RUN mkdir "$SWAGGER_DIRECTORY" && apk --no-cache add protobuf-dev protoc
+RUN mkdir "$SWAGGER_DIRECTORY" && apk --no-cache add inotify-tools protobuf-dev protoc
 
 EXPOSE $PORT
 
-CMD ["sh", "-c", "cd \"$PROTO_DIRECTORY\" && protoc -I/grpc-gateway -I/grpc-gateway/third_party/googleapis -I. --swagger_out=\"$SWAGGER_PARAMS:$SWAGGER_DIRECTORY\" $PROTO_FILES && swagger-ui-server"]
+CMD ["sh", "-c", "cd \"$PROTO_DIRECTORY\" && start.sh $PROTO_FILES"]
