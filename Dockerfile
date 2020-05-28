@@ -24,7 +24,7 @@ ENV SWAGGER_DIRECTORY /api
 ENV SWAGGER_FILE apidocs.swagger.json
 ENV SWAGGER_PARAMS logtostderr=true,allow_merge=true
 
-ENV SHUTDOWN_TIMEOUT=10s
+ENV SHUTDOWN_TIMEOUT 10s
 ENV PORT 3000
 
 COPY --from=builder /go/bin /usr/local/bin
