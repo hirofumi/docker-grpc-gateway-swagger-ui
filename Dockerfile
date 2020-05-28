@@ -22,7 +22,7 @@ ENV PROTO_DIRECTORY /proto
 ENV PROTO_FILES *.proto
 ENV SWAGGER_DIRECTORY /api
 ENV SWAGGER_FILE apidocs.swagger.json
-ENV SWAGGER_PARAMS logtostderr=true,json_names_for_fields=true,allow_merge=true
+ENV SWAGGER_PARAMS logtostderr=true,allow_merge=true
 
 ENV SHUTDOWN_TIMEOUT=10s
 ENV PORT 3000
