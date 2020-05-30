@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  sut:
+    build: test
+    volumes:
+      - /dev/shm:/dev/shm
+      - ./test:/test:ro
+    depends_on:
+      - grpc-gateway-swagger-ui
+  grpc-gateway-swagger-ui:
+    build: .
+    volumes:
+      - ./test/proto:/proto

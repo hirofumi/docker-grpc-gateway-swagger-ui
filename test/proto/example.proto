@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+
+service ExampleService {
+    rpc Echo (ExampleMessage) returns (ExampleMessage) {
+        option (google.api.http) = {
+          get: "/echo/{id}"
+        };
+    }
+}
+
+message ExampleMessage {
+    string id = 1;
+}
