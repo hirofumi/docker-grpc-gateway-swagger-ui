@@ -1,6 +1,6 @@
 asn1crypto==0.24.0
 cryptography==2.3
-idna==2.6
+idna==2.9
 keyring==10.6.0
 keyrings.alt==3.0
 pycrypto==2.6.1
