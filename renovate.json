@@ -3,6 +3,9 @@
     "config:base"
   ],
   "ignorePaths": [],
+  "pipenv": {
+    "enabled": true
+  },
   "postUpdateOptions": [
     "gomodTidy"
   ]
