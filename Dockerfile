@@ -5,12 +5,12 @@ RUN apk add git npm protobuf-dev protoc
 COPY swagger-ui-server /go/src/github.com/hirofumi/docker-grpc-gateway-swagger-ui/swagger-ui-server
 
 RUN cd /go/src/github.com/hirofumi/docker-grpc-gateway-swagger-ui/swagger-ui-server \
-    && go install -ldflags '-w -s' \
+    && CGO_ENABLED=0 go install -ldflags '-w -s -buildid=' -trimpath \
         github.com/golang/protobuf/protoc-gen-go \
         github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway \
         github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger \
     && go generate ./... \
-    && go build -ldflags '-w -s' -o /go/bin/swagger-ui-server . \
+    && CGO_ENABLED=0 go build -ldflags '-w -s -buildid=' -trimpath -o /go/bin/swagger-ui-server . \
     && cp -p start.sh /go/bin \
     && cd "$(find /go/pkg/mod/github.com/grpc-ecosystem -name 'grpc-gateway@*' | sort -r -t@ -V | head -n 1)" \
     && mkdir /grpc-gateway \
