@@ -16,7 +16,7 @@ RUN cd /go/src/github.com/hirofumi/docker-grpc-gateway-swagger-ui/swagger-ui-ser
     && mkdir /grpc-gateway \
     && find . -name '*.proto' -exec cp --parents {} /grpc-gateway ';'
 
-FROM alpine:3.11
+FROM alpine:3.12
 
 ENV PROTO_DIRECTORY /proto
 ENV PROTO_FILES *.proto
