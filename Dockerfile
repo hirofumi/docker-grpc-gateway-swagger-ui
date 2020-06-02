@@ -1,4 +1,4 @@
-FROM golang:1.14.3-alpine AS builder
+FROM golang:1.14.4-alpine AS builder
 
 RUN apk add git npm protobuf-dev protoc
 
