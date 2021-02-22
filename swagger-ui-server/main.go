@@ -33,7 +33,7 @@ func main() {
 	swaggerDirectory := os.Getenv("SWAGGER_DIRECTORY")
 	entryPoint := fmt.Sprintf("/?url=%s/%s", swaggerDirectory, os.Getenv("SWAGGER_FILE"))
 
-	uiServer := http.FileServer(assets.Files)
+	uiServer := http.FileServer(http.FS(assets.Files))
 	jsonServer := http.StripPrefix(swaggerDirectory, http.FileServer(http.Dir(swaggerDirectory)))
 
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
