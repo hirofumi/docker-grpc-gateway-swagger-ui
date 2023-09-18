@@ -1,0 +1,14 @@
+name: Actionlint
+
+on:
+  pull_request:
+
+jobs:
+  actionlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo '::add-matcher::.github/problem-matchers/actionlint.json'
+      - uses: docker://rhysd/actionlint:1.6.25
+        with:
+          args: -color -shellcheck shellcheck
