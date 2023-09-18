@@ -11,7 +11,7 @@ const URL = 'http://grpc-gateway-swagger-ui:3000/';
     await page.waitForSelector('.swagger-ui');
     assert.equal(
         await page.evaluate(() => document.querySelector('h2.title').innerText),
-        'example.proto\n version not set ',
+        'example.proto\n version not set \nOAS 2.0',
     );
 
     await browser.close();
