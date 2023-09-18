@@ -6,6 +6,7 @@ import (
 )
 
 //go:generate npm i
+//go:generate perl -pi -e "s/https:\\/\\/petstore.swagger.io\\/v2\\/swagger.json/\\/swagger.json/" ./node_modules/swagger-ui-dist/index.html
 //go:embed node_modules/swagger-ui-dist
 var root embed.FS
 

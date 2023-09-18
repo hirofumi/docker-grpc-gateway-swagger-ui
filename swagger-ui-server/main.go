@@ -31,7 +31,7 @@ func main() {
 	}
 
 	swaggerDirectory := os.Getenv("SWAGGER_DIRECTORY")
-	entryPoint := fmt.Sprintf("/?url=%s/%s", swaggerDirectory, os.Getenv("SWAGGER_FILE"))
+	swaggerFilePath := fmt.Sprintf("/%s/%s", swaggerDirectory, os.Getenv("SWAGGER_FILE"))
 
 	uiServer := http.FileServer(http.FS(assets.Files))
 	jsonServer := http.StripPrefix(swaggerDirectory, http.FileServer(http.Dir(swaggerDirectory)))
@@ -40,11 +40,8 @@ func main() {
 		switch {
 		case strings.HasPrefix(r.URL.Path, swaggerDirectory):
 			jsonServer.ServeHTTP(w, r)
-		case r.URL.Path == "/":
-			if len(r.URL.Query()) == 0 {
-				http.Redirect(w, r, entryPoint, http.StatusTemporaryRedirect)
-			}
-			fallthrough
+		case r.URL.Path == "/swagger.json":
+			http.Redirect(w, r, swaggerFilePath, http.StatusTemporaryRedirect)
 		case strings.HasPrefix(r.URL.Path, "/"):
 			uiServer.ServeHTTP(w, r)
 		}

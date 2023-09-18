@@ -1,6 +1,6 @@
 FROM golang:1.21.1-alpine AS builder
 
-RUN apk add git npm protobuf-dev protoc
+RUN apk add git npm perl protobuf-dev protoc
 
 COPY swagger-ui-server /go/src/github.com/hirofumi/docker-grpc-gateway-swagger-ui/swagger-ui-server
 

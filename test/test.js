@@ -10,10 +10,6 @@ const URL = 'http://grpc-gateway-swagger-ui:3000/';
     await page.goto(URL);
     await page.waitForSelector('.swagger-ui');
     assert.equal(
-        page.url(),
-        URL + '?url=/api/apidocs.swagger.json',
-    );
-    assert.equal(
         await page.evaluate(() => document.querySelector('h2.title').innerText),
         'example.proto\n version not set ',
     );
