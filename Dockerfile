@@ -6,7 +6,7 @@ COPY swagger-ui-server /go/src/github.com/hirofumi/docker-grpc-gateway-swagger-u
 
 RUN cd /go/src/github.com/hirofumi/docker-grpc-gateway-swagger-ui/swagger-ui-server \
     && CGO_ENABLED=0 go install -ldflags '-w -s -buildid=' -trimpath \
-        github.com/golang/protobuf/protoc-gen-go \
+        google.golang.org/protobuf/cmd/protoc-gen-go \
         github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway \
         github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger \
     && go generate ./... \
