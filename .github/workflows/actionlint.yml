@@ -11,4 +11,4 @@ jobs:
       - run: echo '::add-matcher::.github/problem-matchers/actionlint.json'
       - uses: docker://rhysd/actionlint:1.6.25
         with:
-          args: -color -shellcheck shellcheck
+          args: -color
