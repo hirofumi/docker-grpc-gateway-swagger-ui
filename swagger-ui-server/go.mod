@@ -4,7 +4,7 @@ go 1.21.1
 
 require (
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
-	google.golang.org/protobuf v1.32.0
+	google.golang.org/protobuf v1.33.0
 )
 
 require (
